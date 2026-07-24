@@ -6,7 +6,7 @@
  * Version:           1.0.0
  * Requires at least: 5.0
  * Requires PHP:      7.0
- * Author:            kyocom (Kyo Ichida)
+ * Author:            ABC Japon (Kyo Ichida)
  * Author URI:        https://github.com/kyocom
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
