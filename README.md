@@ -48,7 +48,7 @@ a non-image and images can't break.
 Enlargement is on by default. In the **ABC Enlarge** box (bottom of the block
 editor, or the sidebar in the classic editor) you get two controls:
 
-- **Disable image enlargement for this post** — turns the whole feature off for that post.
+- **Enable image enlargement for this post** — checked by default; uncheck to turn the whole feature off for that post.
 - **Apply to WordPress galleries** — on by default; uncheck to exclude gallery images while keeping normal linked images enlargeable.
 
 ### Developer hooks
@@ -119,7 +119,7 @@ Define `SCRIPT_DEBUG` as `true` to load the unminified script.
 拡大はデフォルトで有効です。編集画面の **ABC Enlarge** ボックス（ブロック
 エディターでは画面下部、クラシックエディターではサイドバー）に2つの項目があります。
 
-- **この投稿で画像拡大を無効にする** — その投稿の拡大機能を丸ごとオフにします。
+- **この投稿で画像拡大を有効にする** — デフォルトでチェック済み。外すとその投稿の拡大機能を丸ごとオフにします。
 - **WordPress ギャラリーにも適用** — デフォルト有効。オフにすると通常のリンク画像は拡大したまま、ギャラリー画像だけを対象外にできます。
 
 ### 開発者向けフック

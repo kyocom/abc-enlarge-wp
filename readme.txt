@@ -4,7 +4,7 @@ Tags: image, zoom, enlarge, lightbox, gallery
 Requires at least: 5.0
 Tested up to: 6.5
 Requires PHP: 7.0
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -30,12 +30,12 @@ ABC Enlarge brings the [abc-enlarge](https://github.com/kyocom/abc-enlarge) jQue
 
 == Usage ==
 
-Enlargement is on by default for every post and page. To turn it off for a single post, open the editor and uncheck it in the **ABC Enlarge** box:
+Enlargement is on by default for every post and page. The **ABC Enlarge** box holds the controls:
 
 * Block editor: the box appears at the bottom of the editor.
 * Classic editor: the box appears in the right-hand sidebar.
 
-Check "Disable image enlargement for this post" to opt that post out. The **Apply to WordPress galleries** checkbox (on by default) controls whether images in classic and block galleries are enlargeable too.
+The "Enable image enlargement for this post" checkbox is checked by default; uncheck it to opt that post out. The **Apply to WordPress galleries** checkbox (on by default) controls whether images in classic and block galleries are enlargeable too.
 
 == Frequently Asked Questions ==
 
@@ -58,6 +58,9 @@ Yes. The script and auto-class run on every singular view, and the per-post togg
 Define `SCRIPT_DEBUG` as `true` in `wp-config.php` and the plugin loads the non-minified build.
 
 == Changelog ==
+
+= 1.1.2 =
+* Reword the per-post control to "Enable image enlargement for this post", checked by default. Unchecking it is evaluated first, before any class is added, so opted-out posts get no `abc-enlarge` markup at all. No change to existing posts (default stays enabled).
 
 = 1.1.1 =
 * Update the bundled abc-enlarge script to v1.0.3, adding a gallery CSS rule so an enlarged image fills its `.gallery-item` cell.

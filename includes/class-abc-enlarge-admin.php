@@ -110,19 +110,19 @@ class ABC_Enlarge_Admin {
 	 * @param WP_Post $post Current post.
 	 */
 	public static function render_meta_box( $post ) {
-		$disabled          = (bool) get_post_meta( $post->ID, ABC_ENLARGE_META_KEY, true );
+		$enabled           = ! (bool) get_post_meta( $post->ID, ABC_ENLARGE_META_KEY, true );
 		$galleries_enabled = ! (bool) get_post_meta( $post->ID, ABC_ENLARGE_GALLERY_META_KEY, true );
 
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
 		?>
 		<p>
 			<label>
-				<input type="checkbox" name="abc_enlarge_disabled" value="1" <?php checked( $disabled ); ?> />
-				<?php esc_html_e( 'Disable image enlargement for this post', 'abc-enlarge' ); ?>
+				<input type="checkbox" name="abc_enlarge_enabled" value="1" <?php checked( $enabled ); ?> />
+				<?php esc_html_e( 'Enable image enlargement for this post', 'abc-enlarge' ); ?>
 			</label>
 		</p>
 		<p class="description">
-			<?php esc_html_e( 'Enlargement is enabled by default. Check this to turn it off for this post only.', 'abc-enlarge' ); ?>
+			<?php esc_html_e( 'Checked by default. Uncheck to turn enlargement off for this post only.', 'abc-enlarge' ); ?>
 		</p>
 		<hr />
 		<p>
@@ -167,13 +167,14 @@ class ABC_Enlarge_Admin {
 			return;
 		}
 
-		$disabled = ! empty( $_POST['abc_enlarge_disabled'] );
+		// Checkbox is "Enable ..."; checked (present) = enabled (the default).
+		$enabled = ! empty( $_POST['abc_enlarge_enabled'] );
 
-		if ( $disabled ) {
-			update_post_meta( $post_id, ABC_ENLARGE_META_KEY, true );
-		} else {
+		if ( $enabled ) {
 			// Keep the DB clean: default (enabled) stores nothing.
 			delete_post_meta( $post_id, ABC_ENLARGE_META_KEY );
+		} else {
+			update_post_meta( $post_id, ABC_ENLARGE_META_KEY, true );
 		}
 
 		// Galleries are applied by default; store only the "excluded" state.
