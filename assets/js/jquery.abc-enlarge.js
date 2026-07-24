@@ -3,7 +3,7 @@
 	style = document.createElement('style');
 	style.type = 'text/css';
 	style.media = 'screen';
-	rule = document.createTextNode('a .abc-enlarge{cursor:zoom-in} a ._abc_enlarged{cursor:zoom-out;} figure:has(.abc-enlarge){width: fit-content;} figure:has(.abc-enlarge.alignleft){float: left;} figure:has(.abc-enlarge.alignright){float: right;} .abc-enlarge,._abc_enlarged{transition:all .4s ease-in-out !important;-webkit-transition:all .4s ease-in-out !important}._abc_f{position:relative;display:block;overflow:auto;width:100vw;height:100vh;}._abc_i{float:none;max-width:400% !important}');
+	rule = document.createTextNode('a .abc-enlarge{cursor:zoom-in} a ._abc_enlarged{cursor:zoom-out;} .gallery-item:has(._abc_enlarged){width:100%;max-width:100% !important;} figure:has(.abc-enlarge){width: fit-content;} figure:has(.abc-enlarge.alignleft){float: left;} figure:has(.abc-enlarge.alignright){float: right;} .abc-enlarge,._abc_enlarged{transition:all .4s ease-in-out !important;-webkit-transition:all .4s ease-in-out !important}._abc_f{position:relative;display:block;overflow:auto;width:100vw;height:100vh;}._abc_i{float:none;max-width:400% !important}');
 	if(style.styleSheet){
 		style.styleSheet.cssText = rule.nodeValue;
 	}else{

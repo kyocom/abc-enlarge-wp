@@ -3,7 +3,7 @@
  * Plugin Name:       ABC Enlarge
  * Plugin URI:        https://github.com/kyocom/abc-enlarge-wp
  * Description:        Inline image zoom for WordPress powered by the abc-enlarge jQuery plugin. Automatically adds the "abc-enlarge" class to linked images in post content, and lets you disable enlargement per post (enabled by default).
- * Version:           1.1.0
+ * Version:           1.1.1
  * Requires at least: 5.0
  * Requires PHP:      7.0
  * Author:            ABC Japon (Kyo Ichida)
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ABC_ENLARGE_VERSION', '1.1.0' );
+define( 'ABC_ENLARGE_VERSION', '1.1.1' );
 define( 'ABC_ENLARGE_FILE', __FILE__ );
 define( 'ABC_ENLARGE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ABC_ENLARGE_URL', plugin_dir_url( __FILE__ ) );

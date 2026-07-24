@@ -4,7 +4,7 @@ Tags: image, zoom, enlarge, lightbox, gallery
 Requires at least: 5.0
 Tested up to: 6.5
 Requires PHP: 7.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -58,6 +58,9 @@ Yes. The script and auto-class run on every singular view, and the per-post togg
 Define `SCRIPT_DEBUG` as `true` in `wp-config.php` and the plugin loads the non-minified build.
 
 == Changelog ==
+
+= 1.1.1 =
+* Update the bundled abc-enlarge script to v1.0.3, adding a gallery CSS rule so an enlarged image fills its `.gallery-item` cell.
 
 = 1.1.0 =
 * Add a per-post "Apply to WordPress galleries" option (on by default). Classic and block gallery images become enlargeable regardless of their link setting.
