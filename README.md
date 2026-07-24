@@ -45,10 +45,15 @@ check **"Disable image enlargement for this post"** in the **ABC Enlarge** box
 
 ### Developer hooks
 
+The script and auto-class run on every singular view, so **custom post types
+are supported out of the box**. The per-post toggle is shown for `post`,
+`page`, and every public custom post type that supports the editor.
+
 ```php
-// Change which post types get the toggle (default: post, page).
+// Change which post types get the toggle
+// (default: post, page + public custom post types that support the editor).
 add_filter( 'abc_enlarge_post_types', function ( $types ) {
-    $types[] = 'product';
+    $types[] = 'my_cpt';
     return $types;
 } );
 
@@ -104,10 +109,15 @@ Define `SCRIPT_DEBUG` as `true` to load the unminified script.
 
 ### 開発者向けフック
 
+スクリプトとクラス自動付与はすべての単一表示（`is_singular`）で動作するため、
+**カスタム投稿タイプにもそのまま対応**します。post 単位の無効化オプションは、
+`post` / `page` と、エディターをサポートする公開カスタム投稿タイプに表示されます。
+
 ```php
-// オプションを表示する投稿タイプを変更（デフォルト: post, page）
+// オプションを表示する投稿タイプを変更
+// （デフォルト: post, page ＋ エディター対応の公開カスタム投稿タイプ）
 add_filter( 'abc_enlarge_post_types', function ( $types ) {
-    $types[] = 'product';
+    $types[] = 'my_cpt';
     return $types;
 } );
 

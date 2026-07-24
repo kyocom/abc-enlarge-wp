@@ -23,7 +23,9 @@ class ABC_Enlarge_Admin {
 	 * Wire up hooks.
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'register_meta' ) );
+		// Late priority so custom post types (usually registered on init:10)
+		// are already available when we read the post-type list.
+		add_action( 'init', array( __CLASS__, 'register_meta' ), 99 );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_box' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_meta' ), 10, 2 );
 	}
@@ -31,15 +33,39 @@ class ABC_Enlarge_Admin {
 	/**
 	 * Post types that should expose the option.
 	 *
+	 * Covers the built-in post and page plus every public custom post type
+	 * that supports the content editor, so custom post types work too.
+	 *
 	 * @return string[]
 	 */
 	protected static function post_types() {
+		// Public custom post types (built-ins are added explicitly below).
+		$custom = get_post_types(
+			array(
+				'public'   => true,
+				'_builtin' => false,
+			),
+			'names'
+		);
+
+		$post_types = array_merge( array( 'post', 'page' ), array_values( $custom ) );
+
+		// Keep only content-bearing types (must support the editor).
+		$post_types = array_values(
+			array_filter(
+				array_unique( $post_types ),
+				function ( $pt ) {
+					return post_type_supports( $pt, 'editor' );
+				}
+			)
+		);
+
 		/**
 		 * Filter the post types that get the abc-enlarge toggle.
 		 *
 		 * @param string[] $post_types Array of post type slugs.
 		 */
-		return (array) apply_filters( 'abc_enlarge_post_types', array( 'post', 'page' ) );
+		return (array) apply_filters( 'abc_enlarge_post_types', $post_types );
 	}
 
 	/**
