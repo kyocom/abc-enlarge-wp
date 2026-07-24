@@ -31,41 +31,15 @@ class ABC_Enlarge_Admin {
 	}
 
 	/**
-	 * Post types that should expose the option.
+	 * Post types that should expose the per-post option.
 	 *
-	 * Covers the built-in post and page plus every public custom post type
-	 * that supports the content editor, so custom post types work too.
+	 * Only the post types enabled on the settings page get the meta box, so a
+	 * globally-disabled type shows no per-post toggle.
 	 *
 	 * @return string[]
 	 */
 	protected static function post_types() {
-		// Public custom post types (built-ins are added explicitly below).
-		$custom = get_post_types(
-			array(
-				'public'   => true,
-				'_builtin' => false,
-			),
-			'names'
-		);
-
-		$post_types = array_merge( array( 'post', 'page' ), array_values( $custom ) );
-
-		// Keep only content-bearing types (must support the editor).
-		$post_types = array_values(
-			array_filter(
-				array_unique( $post_types ),
-				function ( $pt ) {
-					return post_type_supports( $pt, 'editor' );
-				}
-			)
-		);
-
-		/**
-		 * Filter the post types that get the abc-enlarge toggle.
-		 *
-		 * @param string[] $post_types Array of post type slugs.
-		 */
-		return (array) apply_filters( 'abc_enlarge_post_types', $post_types );
+		return abc_enlarge_enabled_post_types();
 	}
 
 	/**

@@ -18,6 +18,7 @@
 - 🔍 **High-res swap** — swaps to the large image from the link's `href`, restores the small one on collapse.
 - 📱 **Touch-friendly** — on portrait phones the image expands into a horizontally scrollable, auto-centered view.
 - 🧩 **Gallery support** — classic `[gallery]` and block galleries become enlargeable regardless of link setting. On by default, toggleable per post.
+- ⚙️ **Post-type settings** — a settings page to pick which post types (post, page, custom post types) enlargement runs on. All eligible types on by default.
 - 🎛️ **Per-post toggles** — disable enlargement, or exclude galleries, on any individual post/page. **Both on by default.**
 
 ### How it targets images
@@ -43,22 +44,30 @@ a non-image and images can't break.
 2. Activate **ABC Enlarge**.
 3. Set your content images to link to the **Media File**. They are enlarged automatically.
 
+### Settings page (post types)
+
+Go to **Settings → ABC Enlarge** to choose which post types image enlargement
+runs on. You get one checkbox per eligible post type — `post`, `page`, and each
+public custom post type that supports the editor. **Only checked post types are
+enabled**; unchecking one disables enlargement (and hides the per-post box) for
+that whole type. All eligible types are checked by default, so nothing changes
+until you opt some out.
+
 ### Per-post option
 
-Enlargement is on by default. In the **ABC Enlarge** box (bottom of the block
-editor, or the sidebar in the classic editor) you get two controls:
+Within an enabled post type, each post can still be tuned. In the **ABC Enlarge**
+box (bottom of the block editor, or the sidebar in the classic editor):
 
 - **Enable image enlargement for this post** — checked by default; uncheck to turn the whole feature off for that post.
 - **Apply to WordPress galleries** — on by default; uncheck to exclude gallery images while keeping normal linked images enlargeable.
 
 ### Developer hooks
 
-The script and auto-class run on every singular view, so **custom post types
-are supported out of the box**. The per-post toggle is shown for `post`,
-`page`, and every public custom post type that supports the editor.
+Custom post types are supported: the settings page lists every public custom
+post type that supports the editor, and the script runs on any enabled type.
 
 ```php
-// Change which post types get the toggle
+// Change which post types are selectable on the settings page
 // (default: post, page + public custom post types that support the editor).
 add_filter( 'abc_enlarge_post_types', function ( $types ) {
     $types[] = 'my_cpt';
@@ -94,6 +103,7 @@ Define `SCRIPT_DEBUG` as `true` to load the unminified script.
 - 🔍 **高解像度差し替え** — リンクの `href` に指定した大きい画像へ差し替え、縮小時に元へ復元。
 - 📱 **タッチ端末対応** — スマホ縦画面では横スクロール可能なビューへ拡大し、中央へ自動スクロール。
 - 🧩 **ギャラリー対応** — クラシック `[gallery]` とブロックギャラリーを、リンク設定に関わらず拡大可能に。デフォルト有効・post 単位で切替可。
+- ⚙️ **投稿タイプ設定** — 設定ページで、拡大を動作させる投稿タイプ（post / page / カスタム投稿タイプ）を選択。対象候補はすべてデフォルト有効。
 - 🎛️ **post 単位のオプション** — 各投稿・固定ページで「拡大の無効化」と「ギャラリー除外」を切替。**どちらもデフォルト有効**。
 
 ### 付与対象について
@@ -114,22 +124,29 @@ Define `SCRIPT_DEBUG` as `true` to load the unminified script.
 2. **ABC Enlarge** を有効化。
 3. 本文画像のリンク先を **「メディアファイル」** にすると、自動的に拡大対象になります。
 
+### 設定ページ（投稿タイプ）
+
+**設定 → ABC Enlarge** で、拡大を動作させる投稿タイプを選べます。`post` /
+`page` と、エディターをサポートする公開カスタム投稿タイプごとにチェックボックスが
+並びます。**チェックした投稿タイプだけが有効**で、外すとその投稿タイプ全体で拡大が
+無効になり（編集画面のボックスも非表示）ます。対象候補は初期状態ですべてチェック
+済みなので、明示的に外すまで挙動は変わりません。
+
 ### post 単位のオプション
 
-拡大はデフォルトで有効です。編集画面の **ABC Enlarge** ボックス（ブロック
-エディターでは画面下部、クラシックエディターではサイドバー）に2つの項目があります。
+有効な投稿タイプの中で、投稿ごとにさらに調整できます。編集画面の **ABC Enlarge**
+ボックス（ブロックエディターでは画面下部、クラシックエディターではサイドバー）:
 
 - **この投稿で画像拡大を有効にする** — デフォルトでチェック済み。外すとその投稿の拡大機能を丸ごとオフにします。
 - **WordPress ギャラリーにも適用** — デフォルト有効。オフにすると通常のリンク画像は拡大したまま、ギャラリー画像だけを対象外にできます。
 
 ### 開発者向けフック
 
-スクリプトとクラス自動付与はすべての単一表示（`is_singular`）で動作するため、
-**カスタム投稿タイプにもそのまま対応**します。post 単位の無効化オプションは、
-`post` / `page` と、エディターをサポートする公開カスタム投稿タイプに表示されます。
+カスタム投稿タイプにも対応しています。設定ページにはエディター対応の公開カスタム
+投稿タイプがすべて並び、有効化した投稿タイプでスクリプトが動作します。
 
 ```php
-// オプションを表示する投稿タイプを変更
+// 設定ページで選択できる投稿タイプを変更
 // （デフォルト: post, page ＋ エディター対応の公開カスタム投稿タイプ）
 add_filter( 'abc_enlarge_post_types', function ( $types ) {
     $types[] = 'my_cpt';

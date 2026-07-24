@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall routine: remove the per-post option meta.
+ * Uninstall routine: remove the per-post option meta and plugin settings.
  *
  * @package ABC_Enlarge
  */
@@ -11,3 +11,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_post_meta_by_key( '_abc_enlarge_disabled' );
 delete_post_meta_by_key( '_abc_enlarge_galleries_disabled' );
+delete_option( 'abc_enlarge_options' );

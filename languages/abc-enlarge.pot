@@ -2,7 +2,7 @@
 # This file is distributed under the MIT license.
 msgid ""
 msgstr ""
-"Project-Id-Version: ABC Enlarge 1.1.2\n"
+"Project-Id-Version: ABC Enlarge 1.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/kyocom/abc-enlarge-wp/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,22 +13,43 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Domain: abc-enlarge\n"
 
-#: includes/class-abc-enlarge-admin.php:98
+#: includes/class-abc-enlarge-admin.php:72 includes/class-abc-enlarge-settings.php:36
+#: includes/class-abc-enlarge-settings.php:37 includes/class-abc-enlarge-settings.php:101
 msgid "ABC Enlarge"
 msgstr ""
 
-#: includes/class-abc-enlarge-admin.php:121
+#: includes/class-abc-enlarge-admin.php:95
 msgid "Enable image enlargement for this post"
 msgstr ""
 
-#: includes/class-abc-enlarge-admin.php:125
+#: includes/class-abc-enlarge-admin.php:99
 msgid "Checked by default. Uncheck to turn enlargement off for this post only."
 msgstr ""
 
-#: includes/class-abc-enlarge-admin.php:131
+#: includes/class-abc-enlarge-admin.php:105
 msgid "Apply to WordPress galleries"
 msgstr ""
 
-#: includes/class-abc-enlarge-admin.php:135
+#: includes/class-abc-enlarge-admin.php:109
 msgid "On by default. Makes images in WordPress galleries enlargeable regardless of their link setting."
+msgstr ""
+
+#: includes/class-abc-enlarge-settings.php:84
+msgid "Settings"
+msgstr ""
+
+#: includes/class-abc-enlarge-settings.php:104
+msgid "Enabled post types"
+msgstr ""
+
+#: includes/class-abc-enlarge-settings.php:106
+msgid "Image enlargement runs only on the post types you check here. Unchecked post types are disabled."
+msgstr ""
+
+#: includes/class-abc-enlarge-settings.php:111
+msgid "Post types"
+msgstr ""
+
+#: includes/class-abc-enlarge-settings.php:129
+msgid "No eligible post types were found."
 msgstr ""

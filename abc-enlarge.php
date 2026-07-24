@@ -3,7 +3,7 @@
  * Plugin Name:       ABC Enlarge
  * Plugin URI:        https://github.com/kyocom/abc-enlarge-wp
  * Description:        Inline image zoom for WordPress powered by the abc-enlarge jQuery plugin. Automatically adds the "abc-enlarge" class to linked images in post content, and lets you disable enlargement per post (enabled by default).
- * Version:           1.1.2
+ * Version:           1.2.0
  * Requires at least: 5.0
  * Requires PHP:      7.0
  * Author:            ABC Japon (Kyo Ichida)
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ABC_ENLARGE_VERSION', '1.1.2' );
+define( 'ABC_ENLARGE_VERSION', '1.2.0' );
 define( 'ABC_ENLARGE_FILE', __FILE__ );
 define( 'ABC_ENLARGE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ABC_ENLARGE_URL', plugin_dir_url( __FILE__ ) );
@@ -38,6 +38,67 @@ define( 'ABC_ENLARGE_META_KEY', '_abc_enlarge_disabled' );
 define( 'ABC_ENLARGE_GALLERY_META_KEY', '_abc_enlarge_galleries_disabled' );
 
 /**
+ * Option name storing the plugin settings (which post types are enabled).
+ */
+define( 'ABC_ENLARGE_OPTION', 'abc_enlarge_options' );
+
+/**
+ * All post types the user may choose from on the settings page.
+ *
+ * Built-in post and page plus every public custom post type that supports the
+ * content editor.
+ *
+ * @return string[]
+ */
+function abc_enlarge_candidate_post_types() {
+	$custom = get_post_types(
+		array(
+			'public'   => true,
+			'_builtin' => false,
+		),
+		'names'
+	);
+
+	$post_types = array_merge( array( 'post', 'page' ), array_values( $custom ) );
+
+	$post_types = array_values(
+		array_filter(
+			array_unique( $post_types ),
+			function ( $pt ) {
+				return post_type_supports( $pt, 'editor' );
+			}
+		)
+	);
+
+	/**
+	 * Filter the selectable post types shown on the settings page.
+	 *
+	 * @param string[] $post_types Array of post type slugs.
+	 */
+	return (array) apply_filters( 'abc_enlarge_post_types', $post_types );
+}
+
+/**
+ * Post types abc-enlarge is currently enabled for (per the settings page).
+ *
+ * Until the settings are saved the default is every candidate post type, so
+ * the plugin keeps working out of the box; unchecking a type opts it out.
+ *
+ * @return string[]
+ */
+function abc_enlarge_enabled_post_types() {
+	$candidates = abc_enlarge_candidate_post_types();
+	$options    = get_option( ABC_ENLARGE_OPTION );
+
+	// Not configured yet -> default to all candidates.
+	if ( ! is_array( $options ) || ! isset( $options['post_types'] ) ) {
+		return $candidates;
+	}
+
+	return array_values( array_intersect( (array) $options['post_types'], $candidates ) );
+}
+
+/**
  * Whether abc-enlarge should run for the given post.
  *
  * @param int|WP_Post|null $post Post ID or object. Defaults to current post.
@@ -46,6 +107,11 @@ define( 'ABC_ENLARGE_GALLERY_META_KEY', '_abc_enlarge_galleries_disabled' );
 function abc_enlarge_is_enabled_for_post( $post = null ) {
 	$post = get_post( $post );
 	if ( ! $post ) {
+		return false;
+	}
+
+	// Global gate: the post type must be enabled on the settings page.
+	if ( ! in_array( $post->post_type, abc_enlarge_enabled_post_types(), true ) ) {
 		return false;
 	}
 
@@ -362,3 +428,6 @@ function abc_enlarge_resolve_large_url( $img ) {
 
 require_once ABC_ENLARGE_DIR . 'includes/class-abc-enlarge-admin.php';
 ABC_Enlarge_Admin::init();
+
+require_once ABC_ENLARGE_DIR . 'includes/class-abc-enlarge-settings.php';
+ABC_Enlarge_Settings::init();
