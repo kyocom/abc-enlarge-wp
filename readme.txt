@@ -2,7 +2,7 @@
 Contributors: ABC Japon
 Tags: image, zoom, enlarge, lightbox, gallery
 Requires at least: 5.0
-Tested up to: 6.5
+Tested up to: 7.0
 Requires PHP: 7.0
 Stable tag: 1.1.2
 License: MIT
