@@ -10,3 +10,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 delete_post_meta_by_key( '_abc_enlarge_disabled' );
+delete_post_meta_by_key( '_abc_enlarge_galleries_disabled' );

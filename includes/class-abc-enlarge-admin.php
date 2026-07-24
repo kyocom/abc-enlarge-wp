@@ -73,19 +73,18 @@ class ABC_Enlarge_Admin {
 	 */
 	public static function register_meta() {
 		foreach ( self::post_types() as $post_type ) {
-			register_post_meta(
-				$post_type,
-				ABC_ENLARGE_META_KEY,
-				array(
-					'type'          => 'boolean',
-					'single'        => true,
-					'default'       => false,
-					'show_in_rest'  => true,
-					'auth_callback' => function () {
-						return current_user_can( 'edit_posts' );
-					},
-				)
+			$args = array(
+				'type'          => 'boolean',
+				'single'        => true,
+				'default'       => false,
+				'show_in_rest'  => true,
+				'auth_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
 			);
+
+			register_post_meta( $post_type, ABC_ENLARGE_META_KEY, $args );
+			register_post_meta( $post_type, ABC_ENLARGE_GALLERY_META_KEY, $args );
 		}
 	}
 
@@ -111,7 +110,8 @@ class ABC_Enlarge_Admin {
 	 * @param WP_Post $post Current post.
 	 */
 	public static function render_meta_box( $post ) {
-		$disabled = (bool) get_post_meta( $post->ID, ABC_ENLARGE_META_KEY, true );
+		$disabled          = (bool) get_post_meta( $post->ID, ABC_ENLARGE_META_KEY, true );
+		$galleries_enabled = ! (bool) get_post_meta( $post->ID, ABC_ENLARGE_GALLERY_META_KEY, true );
 
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
 		?>
@@ -123,6 +123,16 @@ class ABC_Enlarge_Admin {
 		</p>
 		<p class="description">
 			<?php esc_html_e( 'Enlargement is enabled by default. Check this to turn it off for this post only.', 'abc-enlarge' ); ?>
+		</p>
+		<hr />
+		<p>
+			<label>
+				<input type="checkbox" name="abc_enlarge_galleries" value="1" <?php checked( $galleries_enabled ); ?> />
+				<?php esc_html_e( 'Apply to WordPress galleries', 'abc-enlarge' ); ?>
+			</label>
+		</p>
+		<p class="description">
+			<?php esc_html_e( 'On by default. Makes images in WordPress galleries enlargeable regardless of their link setting.', 'abc-enlarge' ); ?>
 		</p>
 		<?php
 	}
@@ -164,6 +174,15 @@ class ABC_Enlarge_Admin {
 		} else {
 			// Keep the DB clean: default (enabled) stores nothing.
 			delete_post_meta( $post_id, ABC_ENLARGE_META_KEY );
+		}
+
+		// Galleries are applied by default; store only the "excluded" state.
+		$galleries_disabled = empty( $_POST['abc_enlarge_galleries'] );
+
+		if ( $galleries_disabled ) {
+			update_post_meta( $post_id, ABC_ENLARGE_GALLERY_META_KEY, true );
+		} else {
+			delete_post_meta( $post_id, ABC_ENLARGE_GALLERY_META_KEY );
 		}
 	}
 }
