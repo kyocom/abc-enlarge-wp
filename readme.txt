@@ -1,5 +1,5 @@
 === ABC Enlarge ===
-Contributors: ABC Japon
+Contributors: kyo-ichida
 Tags: image, zoom, enlarge, lightbox, gallery
 Requires at least: 5.0
 Tested up to: 7.0
