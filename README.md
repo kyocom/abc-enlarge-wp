@@ -1,4 +1,4 @@
-# ABC Enlarge (WordPress plugin)
+# Inlarge – Inline Image Zoom (WordPress plugin)
 
 > Inline image zoom for WordPress, powered by the [abc-enlarge](https://github.com/kyocom/abc-enlarge) jQuery plugin. Enlarges images **in place** without covering the page, so the surrounding text stays readable.
 > ページを覆い隠さず、文章を読める状態のまま画像を拡大する WordPress プラグイン。
@@ -40,13 +40,13 @@ a non-image and images can't break.
 
 ### Install
 
-1. Copy this folder to `wp-content/plugins/abc-enlarge/` (or upload the ZIP via **Plugins → Add New → Upload Plugin**).
-2. Activate **ABC Enlarge**.
+1. Copy this folder to `wp-content/plugins/inlarge/` (or upload the ZIP via **Plugins → Add New → Upload Plugin**).
+2. Activate **Inlarge**.
 3. Set your content images to link to the **Media File**. They are enlarged automatically.
 
 ### Settings page (post types)
 
-Go to **Settings → ABC Enlarge** to choose which post types image enlargement
+Go to **Settings → Inlarge** to choose which post types image enlargement
 runs on. You get one checkbox per eligible post type — `post`, `page`, and each
 public custom post type that supports the editor. **Only checked post types are
 enabled**; unchecking one disables enlargement (and hides the per-post box) for
@@ -55,7 +55,7 @@ until you opt some out.
 
 ### Per-post option
 
-Within an enabled post type, each post can still be tuned. In the **ABC Enlarge**
+Within an enabled post type, each post can still be tuned. In the **Inlarge**
 box (bottom of the block editor, or the sidebar in the classic editor):
 
 - **Enable image enlargement for this post** — checked by default; uncheck to turn the whole feature off for that post.
@@ -69,13 +69,13 @@ post type that supports the editor, and the script runs on any enabled type.
 ```php
 // Change which post types are selectable on the settings page
 // (default: post, page + public custom post types that support the editor).
-add_filter( 'abc_enlarge_post_types', function ( $types ) {
+add_filter( 'inlarge_post_types', function ( $types ) {
     $types[] = 'my_cpt';
     return $types;
 } );
 
 // Programmatically force enable/disable for a post.
-add_filter( 'abc_enlarge_is_enabled_for_post', function ( $enabled, $post ) {
+add_filter( 'inlarge_is_enabled_for_post', function ( $enabled, $post ) {
     return $enabled;
 }, 10, 2 );
 ```
@@ -120,13 +120,13 @@ Define `SCRIPT_DEBUG` as `true` to load the unminified script.
 
 ### インストール
 
-1. このフォルダを `wp-content/plugins/abc-enlarge/` に配置（または ZIP を **プラグイン → 新規追加 → プラグインのアップロード** から）。
-2. **ABC Enlarge** を有効化。
+1. このフォルダを `wp-content/plugins/inlarge/` に配置（または ZIP を **プラグイン → 新規追加 → プラグインのアップロード** から）。
+2. **Inlarge** を有効化。
 3. 本文画像のリンク先を **「メディアファイル」** にすると、自動的に拡大対象になります。
 
 ### 設定ページ（投稿タイプ）
 
-**設定 → ABC Enlarge** で、拡大を動作させる投稿タイプを選べます。`post` /
+**設定 → Inlarge** で、拡大を動作させる投稿タイプを選べます。`post` /
 `page` と、エディターをサポートする公開カスタム投稿タイプごとにチェックボックスが
 並びます。**チェックした投稿タイプだけが有効**で、外すとその投稿タイプ全体で拡大が
 無効になり（編集画面のボックスも非表示）ます。対象候補は初期状態ですべてチェック
@@ -134,7 +134,7 @@ Define `SCRIPT_DEBUG` as `true` to load the unminified script.
 
 ### post 単位のオプション
 
-有効な投稿タイプの中で、投稿ごとにさらに調整できます。編集画面の **ABC Enlarge**
+有効な投稿タイプの中で、投稿ごとにさらに調整できます。編集画面の **Inlarge**
 ボックス（ブロックエディターでは画面下部、クラシックエディターではサイドバー）:
 
 - **この投稿で画像拡大を有効にする** — デフォルトでチェック済み。外すとその投稿の拡大機能を丸ごとオフにします。
@@ -148,13 +148,13 @@ Define `SCRIPT_DEBUG` as `true` to load the unminified script.
 ```php
 // 設定ページで選択できる投稿タイプを変更
 // （デフォルト: post, page ＋ エディター対応の公開カスタム投稿タイプ）
-add_filter( 'abc_enlarge_post_types', function ( $types ) {
+add_filter( 'inlarge_post_types', function ( $types ) {
     $types[] = 'my_cpt';
     return $types;
 } );
 
 // 投稿ごとに有効/無効をプログラムで制御
-add_filter( 'abc_enlarge_is_enabled_for_post', function ( $enabled, $post ) {
+add_filter( 'inlarge_is_enabled_for_post', function ( $enabled, $post ) {
     return $enabled;
 }, 10, 2 );
 ```

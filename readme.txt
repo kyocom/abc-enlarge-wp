@@ -1,4 +1,4 @@
-=== ABC Enlarge ===
+=== Inlarge – Inline Image Zoom ===
 Contributors: kyo-ichida
 Tags: image, zoom, enlarge, lightbox, gallery
 Requires at least: 5.0
@@ -12,7 +12,7 @@ Inline image zoom for WordPress. Enlarges images in place without covering the p
 
 == Description ==
 
-ABC Enlarge brings the [abc-enlarge](https://github.com/kyocom/abc-enlarge) jQuery plugin to WordPress. Unlike typical lightbox plugins that dim the whole screen, it enlarges the clicked image **in place** — the article text around it stays readable. Ideal for web magazines and long-form articles.
+Inlarge brings the [abc-enlarge](https://github.com/kyocom/abc-enlarge) jQuery library to WordPress. Unlike typical lightbox plugins that dim the whole screen, it enlarges the clicked image **in place** — the article text around it stays readable. Ideal for web magazines and long-form articles.
 
 **What it does**
 
@@ -24,15 +24,15 @@ ABC Enlarge brings the [abc-enlarge](https://github.com/kyocom/abc-enlarge) jQue
 
 == Installation ==
 
-1. Upload the `abc-enlarge` folder to `/wp-content/plugins/`, or install the ZIP via Plugins → Add New → Upload Plugin.
+1. Upload the `inlarge` folder to `/wp-content/plugins/`, or install the ZIP via Plugins → Add New → Upload Plugin.
 2. Activate the plugin through the Plugins menu in WordPress.
 3. Make sure your images link to the media file (in the block/classic editor, set the image link to "Media File"). Those images are enlarged automatically.
 
 == Usage ==
 
-Under **Settings → ABC Enlarge**, tick which post types (post, page, custom post types) enlargement runs on. Only checked post types are enabled; all eligible types are checked by default.
+Under **Settings → Inlarge**, tick which post types (post, page, custom post types) enlargement runs on. Only checked post types are enabled; all eligible types are checked by default.
 
-Within an enabled post type, each post also has controls in the **ABC Enlarge** box:
+Within an enabled post type, each post also has controls in the **Inlarge** box:
 
 * Block editor: the box appears at the bottom of the editor.
 * Classic editor: the box appears in the right-hand sidebar.
@@ -62,7 +62,7 @@ Define `SCRIPT_DEBUG` as `true` in `wp-config.php` and the plugin loads the non-
 == Changelog ==
 
 = 1.2.0 =
-* Add a **Settings → ABC Enlarge** page to choose which post types (post, page, and public custom post types) image enlargement runs on. Only checked post types are enabled. Defaults to all eligible post types.
+* Add a **Settings → Inlarge** page to choose which post types (post, page, and public custom post types) image enlargement runs on. Only checked post types are enabled. Defaults to all eligible post types.
 
 = 1.1.2 =
 * Reword the per-post control to "Enable image enlargement for this post", checked by default. Unchecking it is evaluated first, before any class is added, so opted-out posts get no `abc-enlarge` markup at all. No change to existing posts (default stays enabled).

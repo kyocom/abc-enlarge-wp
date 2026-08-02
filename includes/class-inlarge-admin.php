@@ -2,7 +2,7 @@
 /**
  * Admin-side handling: per-post "disable enlargement" option.
  *
- * @package ABC_Enlarge
+ * @package Inlarge
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,13 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Registers the post meta and the classic-editor meta box that let an author
- * disable abc-enlarge for an individual post. Enlargement is enabled by
+ * disable Inlarge for an individual post. Enlargement is enabled by
  * default, so the stored meta only ever records the "disabled" state.
  */
-class ABC_Enlarge_Admin {
+class Inlarge_Admin {
 
-	const NONCE_ACTION = 'abc_enlarge_save_meta';
-	const NONCE_NAME   = 'abc_enlarge_nonce';
+	const NONCE_ACTION = 'inlarge_save_meta';
+	const NONCE_NAME   = 'inlarge_nonce';
 
 	/**
 	 * Wire up hooks.
@@ -39,7 +39,7 @@ class ABC_Enlarge_Admin {
 	 * @return string[]
 	 */
 	protected static function post_types() {
-		return abc_enlarge_enabled_post_types();
+		return inlarge_enabled_post_types();
 	}
 
 	/**
@@ -57,8 +57,8 @@ class ABC_Enlarge_Admin {
 				},
 			);
 
-			register_post_meta( $post_type, ABC_ENLARGE_META_KEY, $args );
-			register_post_meta( $post_type, ABC_ENLARGE_GALLERY_META_KEY, $args );
+			register_post_meta( $post_type, INLARGE_META_KEY, $args );
+			register_post_meta( $post_type, INLARGE_GALLERY_META_KEY, $args );
 		}
 	}
 
@@ -68,8 +68,8 @@ class ABC_Enlarge_Admin {
 	public static function add_meta_box() {
 		foreach ( self::post_types() as $post_type ) {
 			add_meta_box(
-				'abc-enlarge',
-				__( 'ABC Enlarge', 'abc-enlarge' ),
+				'inlarge',
+				__( 'Inlarge', 'inlarge' ),
 				array( __CLASS__, 'render_meta_box' ),
 				$post_type,
 				'side',
@@ -84,29 +84,29 @@ class ABC_Enlarge_Admin {
 	 * @param WP_Post $post Current post.
 	 */
 	public static function render_meta_box( $post ) {
-		$enabled           = ! (bool) get_post_meta( $post->ID, ABC_ENLARGE_META_KEY, true );
-		$galleries_enabled = ! (bool) get_post_meta( $post->ID, ABC_ENLARGE_GALLERY_META_KEY, true );
+		$enabled           = ! (bool) get_post_meta( $post->ID, INLARGE_META_KEY, true );
+		$galleries_enabled = ! (bool) get_post_meta( $post->ID, INLARGE_GALLERY_META_KEY, true );
 
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
 		?>
 		<p>
 			<label>
-				<input type="checkbox" name="abc_enlarge_enabled" value="1" <?php checked( $enabled ); ?> />
-				<?php esc_html_e( 'Enable image enlargement for this post', 'abc-enlarge' ); ?>
+				<input type="checkbox" name="inlarge_enabled" value="1" <?php checked( $enabled ); ?> />
+				<?php esc_html_e( 'Enable image enlargement for this post', 'inlarge' ); ?>
 			</label>
 		</p>
 		<p class="description">
-			<?php esc_html_e( 'Checked by default. Uncheck to turn enlargement off for this post only.', 'abc-enlarge' ); ?>
+			<?php esc_html_e( 'Checked by default. Uncheck to turn enlargement off for this post only.', 'inlarge' ); ?>
 		</p>
 		<hr />
 		<p>
 			<label>
-				<input type="checkbox" name="abc_enlarge_galleries" value="1" <?php checked( $galleries_enabled ); ?> />
-				<?php esc_html_e( 'Apply to WordPress galleries', 'abc-enlarge' ); ?>
+				<input type="checkbox" name="inlarge_galleries" value="1" <?php checked( $galleries_enabled ); ?> />
+				<?php esc_html_e( 'Apply to WordPress galleries', 'inlarge' ); ?>
 			</label>
 		</p>
 		<p class="description">
-			<?php esc_html_e( 'On by default. Makes images in WordPress galleries enlargeable regardless of their link setting.', 'abc-enlarge' ); ?>
+			<?php esc_html_e( 'On by default. Makes images in WordPress galleries enlargeable regardless of their link setting.', 'inlarge' ); ?>
 		</p>
 		<?php
 	}
@@ -142,22 +142,22 @@ class ABC_Enlarge_Admin {
 		}
 
 		// Checkbox is "Enable ..."; checked (present) = enabled (the default).
-		$enabled = ! empty( $_POST['abc_enlarge_enabled'] );
+		$enabled = ! empty( $_POST['inlarge_enabled'] );
 
 		if ( $enabled ) {
 			// Keep the DB clean: default (enabled) stores nothing.
-			delete_post_meta( $post_id, ABC_ENLARGE_META_KEY );
+			delete_post_meta( $post_id, INLARGE_META_KEY );
 		} else {
-			update_post_meta( $post_id, ABC_ENLARGE_META_KEY, true );
+			update_post_meta( $post_id, INLARGE_META_KEY, true );
 		}
 
 		// Galleries are applied by default; store only the "excluded" state.
-		$galleries_disabled = empty( $_POST['abc_enlarge_galleries'] );
+		$galleries_disabled = empty( $_POST['inlarge_galleries'] );
 
 		if ( $galleries_disabled ) {
-			update_post_meta( $post_id, ABC_ENLARGE_GALLERY_META_KEY, true );
+			update_post_meta( $post_id, INLARGE_GALLERY_META_KEY, true );
 		} else {
-			delete_post_meta( $post_id, ABC_ENLARGE_GALLERY_META_KEY );
+			delete_post_meta( $post_id, INLARGE_GALLERY_META_KEY );
 		}
 	}
 }

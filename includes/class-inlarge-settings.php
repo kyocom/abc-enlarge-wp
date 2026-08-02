@@ -1,8 +1,8 @@
 <?php
 /**
- * Settings page: choose which post types abc-enlarge is enabled for.
+ * Settings page: choose which post types Inlarge is enabled for.
  *
- * @package ABC_Enlarge
+ * @package Inlarge
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,14 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Registers a Settings -> ABC Enlarge page with one checkbox per candidate
+ * Registers a Settings -> Inlarge page with one checkbox per candidate
  * post type. Only the checked post types are enabled; unchecking one opts it
  * out globally.
  */
-class ABC_Enlarge_Settings {
+class Inlarge_Settings {
 
-	const OPTION_GROUP = 'abc_enlarge_group';
-	const PAGE_SLUG    = 'abc-enlarge';
+	const OPTION_GROUP = 'inlarge_group';
+	const PAGE_SLUG    = 'inlarge';
 
 	/**
 	 * Wire up hooks.
@@ -25,7 +25,7 @@ class ABC_Enlarge_Settings {
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'add_page' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register' ) );
-		add_filter( 'plugin_action_links_' . plugin_basename( ABC_ENLARGE_FILE ), array( __CLASS__, 'action_links' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( INLARGE_FILE ), array( __CLASS__, 'action_links' ) );
 	}
 
 	/**
@@ -33,8 +33,8 @@ class ABC_Enlarge_Settings {
 	 */
 	public static function add_page() {
 		add_options_page(
-			__( 'ABC Enlarge', 'abc-enlarge' ),
-			__( 'ABC Enlarge', 'abc-enlarge' ),
+			__( 'Inlarge', 'inlarge' ),
+			__( 'Inlarge', 'inlarge' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			array( __CLASS__, 'render_page' )
@@ -47,7 +47,7 @@ class ABC_Enlarge_Settings {
 	public static function register() {
 		register_setting(
 			self::OPTION_GROUP,
-			ABC_ENLARGE_OPTION,
+			INLARGE_OPTION,
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => array( __CLASS__, 'sanitize' ),
@@ -62,7 +62,7 @@ class ABC_Enlarge_Settings {
 	 * @return array Sanitized option value.
 	 */
 	public static function sanitize( $input ) {
-		$candidates = abc_enlarge_candidate_post_types();
+		$candidates = inlarge_candidate_post_types();
 		$selected   = array();
 
 		if ( is_array( $input ) && isset( $input['post_types'] ) && is_array( $input['post_types'] ) ) {
@@ -81,7 +81,7 @@ class ABC_Enlarge_Settings {
 	 */
 	public static function action_links( $links ) {
 		$url  = admin_url( 'options-general.php?page=' . self::PAGE_SLUG );
-		$link = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'abc-enlarge' ) . '</a>';
+		$link = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'inlarge' ) . '</a>';
 		array_unshift( $links, $link );
 		return $links;
 	}
@@ -94,21 +94,21 @@ class ABC_Enlarge_Settings {
 			return;
 		}
 
-		$candidates = abc_enlarge_candidate_post_types();
-		$enabled    = abc_enlarge_enabled_post_types();
+		$candidates = inlarge_candidate_post_types();
+		$enabled    = inlarge_enabled_post_types();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'ABC Enlarge', 'abc-enlarge' ); ?></h1>
+			<h1><?php esc_html_e( 'Inlarge', 'inlarge' ); ?></h1>
 			<form method="post" action="options.php">
 				<?php settings_fields( self::OPTION_GROUP ); ?>
-				<h2><?php esc_html_e( 'Enabled post types', 'abc-enlarge' ); ?></h2>
+				<h2><?php esc_html_e( 'Enabled post types', 'inlarge' ); ?></h2>
 				<p class="description">
-					<?php esc_html_e( 'Image enlargement runs only on the post types you check here. Unchecked post types are disabled.', 'abc-enlarge' ); ?>
+					<?php esc_html_e( 'Image enlargement runs only on the post types you check here. Unchecked post types are disabled.', 'inlarge' ); ?>
 				</p>
 				<table class="form-table" role="presentation">
 					<tbody>
 						<tr>
-							<th scope="row"><?php esc_html_e( 'Post types', 'abc-enlarge' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Post types', 'inlarge' ); ?></th>
 							<td>
 								<fieldset>
 									<?php foreach ( $candidates as $pt ) : ?>
@@ -117,7 +117,7 @@ class ABC_Enlarge_Settings {
 										<label style="display:block;margin:0 0 6px;">
 											<input
 												type="checkbox"
-												name="<?php echo esc_attr( ABC_ENLARGE_OPTION ); ?>[post_types][]"
+												name="<?php echo esc_attr( INLARGE_OPTION ); ?>[post_types][]"
 												value="<?php echo esc_attr( $pt ); ?>"
 												<?php checked( in_array( $pt, $enabled, true ) ); ?>
 											/>
@@ -126,7 +126,7 @@ class ABC_Enlarge_Settings {
 										</label>
 									<?php endforeach; ?>
 									<?php if ( empty( $candidates ) ) : ?>
-										<p><?php esc_html_e( 'No eligible post types were found.', 'abc-enlarge' ); ?></p>
+										<p><?php esc_html_e( 'No eligible post types were found.', 'inlarge' ); ?></p>
 									<?php endif; ?>
 								</fieldset>
 							</td>

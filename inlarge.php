@@ -1,46 +1,46 @@
 <?php
 /**
- * Plugin Name:       ABC Enlarge
- * Plugin URI:        https://github.com/kyocom/abc-enlarge-wp
- * Description:        Inline image zoom for WordPress powered by the abc-enlarge jQuery plugin. Automatically adds the "abc-enlarge" class to linked images in post content, and lets you disable enlargement per post (enabled by default).
+ * Plugin Name:       Inlarge – Inline Image Zoom
+ * Plugin URI:        https://github.com/kyocom/inlarge
+ * Description:        Inline image zoom for WordPress powered by the abc-enlarge jQuery library. Enlarges images in place without covering the page, adds the enlarge class automatically, and lets you choose which post types it runs on.
  * Version:           1.2.0
  * Requires at least: 5.0
  * Requires PHP:      7.0
- * Author:            ABC Japon (Kyo Ichida)
+ * Author:            Kyo Ichida
  * Author URI:        https://github.com/kyocom
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
- * Text Domain:       abc-enlarge
+ * Text Domain:       inlarge
  * Domain Path:       /languages
  *
- * @package ABC_Enlarge
+ * @package Inlarge
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ABC_ENLARGE_VERSION', '1.2.0' );
-define( 'ABC_ENLARGE_FILE', __FILE__ );
-define( 'ABC_ENLARGE_DIR', plugin_dir_path( __FILE__ ) );
-define( 'ABC_ENLARGE_URL', plugin_dir_url( __FILE__ ) );
+define( 'INLARGE_VERSION', '1.2.0' );
+define( 'INLARGE_FILE', __FILE__ );
+define( 'INLARGE_DIR', plugin_dir_path( __FILE__ ) );
+define( 'INLARGE_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * Post meta key that, when truthy, disables enlargement for a single post.
  * Enlargement is ENABLED by default (absence of the flag == enabled).
  */
-define( 'ABC_ENLARGE_META_KEY', '_abc_enlarge_disabled' );
+define( 'INLARGE_META_KEY', '_inlarge_disabled' );
 
 /**
  * Post meta key that, when truthy, excludes WordPress galleries.
  * Galleries are INCLUDED by default (absence of the flag == applied).
  */
-define( 'ABC_ENLARGE_GALLERY_META_KEY', '_abc_enlarge_galleries_disabled' );
+define( 'INLARGE_GALLERY_META_KEY', '_inlarge_galleries_disabled' );
 
 /**
  * Option name storing the plugin settings (which post types are enabled).
  */
-define( 'ABC_ENLARGE_OPTION', 'abc_enlarge_options' );
+define( 'INLARGE_OPTION', 'inlarge_options' );
 
 /**
  * All post types the user may choose from on the settings page.
@@ -50,7 +50,7 @@ define( 'ABC_ENLARGE_OPTION', 'abc_enlarge_options' );
  *
  * @return string[]
  */
-function abc_enlarge_candidate_post_types() {
+function inlarge_candidate_post_types() {
 	$custom = get_post_types(
 		array(
 			'public'   => true,
@@ -75,20 +75,20 @@ function abc_enlarge_candidate_post_types() {
 	 *
 	 * @param string[] $post_types Array of post type slugs.
 	 */
-	return (array) apply_filters( 'abc_enlarge_post_types', $post_types );
+	return (array) apply_filters( 'inlarge_post_types', $post_types );
 }
 
 /**
- * Post types abc-enlarge is currently enabled for (per the settings page).
+ * Post types Inlarge is currently enabled for (per the settings page).
  *
  * Until the settings are saved the default is every candidate post type, so
  * the plugin keeps working out of the box; unchecking a type opts it out.
  *
  * @return string[]
  */
-function abc_enlarge_enabled_post_types() {
-	$candidates = abc_enlarge_candidate_post_types();
-	$options    = get_option( ABC_ENLARGE_OPTION );
+function inlarge_enabled_post_types() {
+	$candidates = inlarge_candidate_post_types();
+	$options    = get_option( INLARGE_OPTION );
 
 	// Not configured yet -> default to all candidates.
 	if ( ! is_array( $options ) || ! isset( $options['post_types'] ) ) {
@@ -99,85 +99,85 @@ function abc_enlarge_enabled_post_types() {
 }
 
 /**
- * Whether abc-enlarge should run for the given post.
+ * Whether Inlarge should run for the given post.
  *
  * @param int|WP_Post|null $post Post ID or object. Defaults to current post.
  * @return bool True when enlargement is enabled for the post.
  */
-function abc_enlarge_is_enabled_for_post( $post = null ) {
+function inlarge_is_enabled_for_post( $post = null ) {
 	$post = get_post( $post );
 	if ( ! $post ) {
 		return false;
 	}
 
 	// Global gate: the post type must be enabled on the settings page.
-	if ( ! in_array( $post->post_type, abc_enlarge_enabled_post_types(), true ) ) {
+	if ( ! in_array( $post->post_type, inlarge_enabled_post_types(), true ) ) {
 		return false;
 	}
 
-	$disabled = (bool) get_post_meta( $post->ID, ABC_ENLARGE_META_KEY, true );
+	$disabled = (bool) get_post_meta( $post->ID, INLARGE_META_KEY, true );
 
 	/**
-	 * Filter whether abc-enlarge is enabled for a specific post.
+	 * Filter whether Inlarge is enabled for a specific post.
 	 *
 	 * @param bool    $enabled Whether enlargement is enabled.
 	 * @param WP_Post $post    The post object.
 	 */
-	return (bool) apply_filters( 'abc_enlarge_is_enabled_for_post', ! $disabled, $post );
+	return (bool) apply_filters( 'inlarge_is_enabled_for_post', ! $disabled, $post );
 }
 
 /**
- * Whether abc-enlarge should also apply to WordPress galleries for the post.
+ * Whether Inlarge should also apply to WordPress galleries for the post.
  *
  * @param int|WP_Post|null $post Post ID or object. Defaults to current post.
  * @return bool True when galleries are included.
  */
-function abc_enlarge_galleries_enabled_for_post( $post = null ) {
+function inlarge_galleries_enabled_for_post( $post = null ) {
 	$post = get_post( $post );
 	if ( ! $post ) {
 		return false;
 	}
 
-	$disabled = (bool) get_post_meta( $post->ID, ABC_ENLARGE_GALLERY_META_KEY, true );
+	$disabled = (bool) get_post_meta( $post->ID, INLARGE_GALLERY_META_KEY, true );
 
 	/**
-	 * Filter whether abc-enlarge applies to galleries for a specific post.
+	 * Filter whether Inlarge applies to galleries for a specific post.
 	 *
 	 * @param bool    $enabled Whether galleries are included.
 	 * @param WP_Post $post    The post object.
 	 */
-	return (bool) apply_filters( 'abc_enlarge_galleries_enabled_for_post', ! $disabled, $post );
+	return (bool) apply_filters( 'inlarge_galleries_enabled_for_post', ! $disabled, $post );
 }
 
 /**
  * Register (but do not enqueue) the front-end script.
  */
-function abc_enlarge_register_assets() {
+function inlarge_register_assets() {
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	wp_register_script(
-		'abc-enlarge',
-		ABC_ENLARGE_URL . 'assets/js/jquery.abc-enlarge' . $suffix . '.js',
+		'inlarge',
+		INLARGE_URL . 'assets/js/jquery.abc-enlarge' . $suffix . '.js',
 		array( 'jquery' ),
-		ABC_ENLARGE_VERSION,
+		INLARGE_VERSION,
 		true
 	);
 }
-add_action( 'wp_enqueue_scripts', 'abc_enlarge_register_assets' );
+add_action( 'wp_enqueue_scripts', 'inlarge_register_assets' );
 
 /**
  * Enqueue the script on singular views where enlargement is enabled.
  */
-function abc_enlarge_maybe_enqueue() {
+function inlarge_maybe_enqueue() {
 	if ( ! is_singular() ) {
 		return;
 	}
-	if ( ! abc_enlarge_is_enabled_for_post( get_queried_object_id() ) ) {
+	if ( ! inlarge_is_enabled_for_post( get_queried_object_id() ) ) {
 		return;
 	}
-	wp_enqueue_script( 'abc-enlarge' );
+	wp_enqueue_script( 'inlarge' );
 }
-add_action( 'wp_enqueue_scripts', 'abc_enlarge_maybe_enqueue', 20 );
+add_action( 'wp_enqueue_scripts', 'inlarge_maybe_enqueue', 20 );
 
 /**
  * Add the "abc-enlarge" class to eligible images in post content.
@@ -190,7 +190,7 @@ add_action( 'wp_enqueue_scripts', 'abc_enlarge_maybe_enqueue', 20 );
  * @param string $content The post content.
  * @return string Filtered content.
  */
-function abc_enlarge_filter_content( $content ) {
+function inlarge_filter_content( $content ) {
 	if ( is_admin() || ! in_the_loop() || ! is_main_query() ) {
 		return $content;
 	}
@@ -198,7 +198,7 @@ function abc_enlarge_filter_content( $content ) {
 		return $content;
 	}
 	$post_id = get_the_ID();
-	if ( ! abc_enlarge_is_enabled_for_post( $post_id ) ) {
+	if ( ! inlarge_is_enabled_for_post( $post_id ) ) {
 		return $content;
 	}
 	if ( false === strpos( $content, '<img' ) ) {
@@ -212,12 +212,12 @@ function abc_enlarge_filter_content( $content ) {
 
 	// Gallery-free content takes the fast, proven regex path unchanged.
 	if ( ! $has_gallery || ! class_exists( 'DOMDocument' ) ) {
-		return abc_enlarge_apply_to_linked_images( $content );
+		return inlarge_apply_to_linked_images( $content );
 	}
 
-	return abc_enlarge_apply_with_galleries( $content, abc_enlarge_galleries_enabled_for_post( $post_id ) );
+	return inlarge_apply_with_galleries( $content, inlarge_galleries_enabled_for_post( $post_id ) );
 }
-add_filter( 'the_content', 'abc_enlarge_filter_content', 20 );
+add_filter( 'the_content', 'inlarge_filter_content', 20 );
 
 /**
  * Fast path: add the class to images wrapped in an <a> linking to an image file.
@@ -225,14 +225,14 @@ add_filter( 'the_content', 'abc_enlarge_filter_content', 20 );
  * @param string $content The post content.
  * @return string Filtered content.
  */
-function abc_enlarge_apply_to_linked_images( $content ) {
+function inlarge_apply_to_linked_images( $content ) {
 	// Match <a href="...image..."> ... <img ...>
 	$pattern = '#(<a\b[^>]*\bhref\s*=\s*(["\'])(?<href>[^"\']+?)\2[^>]*>\s*)(?<img><img\b[^>]*>)#i';
 
 	return preg_replace_callback(
 		$pattern,
 		function ( $m ) {
-			if ( ! abc_enlarge_href_is_image( $m['href'] ) ) {
+			if ( ! inlarge_href_is_image( $m['href'] ) ) {
 				return $m[0]; // Not an image link — leave untouched.
 			}
 
@@ -264,7 +264,7 @@ function abc_enlarge_apply_to_linked_images( $content ) {
  * @param string $href The URL.
  * @return bool
  */
-function abc_enlarge_href_is_image( $href ) {
+function inlarge_href_is_image( $href ) {
 	$href = html_entity_decode( (string) $href, ENT_QUOTES );
 	$path = strtok( $href, '?#' ); // Strip query/fragment before the extension check.
 	return (bool) preg_match( '#\.(jpe?g|png|gif|webp|avif|bmp|svg)$#i', (string) $path );
@@ -281,27 +281,27 @@ function abc_enlarge_href_is_image( $href ) {
  * @param bool   $apply_galleries Whether to include gallery images.
  * @return string Filtered content.
  */
-function abc_enlarge_apply_with_galleries( $content, $apply_galleries ) {
+function inlarge_apply_with_galleries( $content, $apply_galleries ) {
 	$dom  = new DOMDocument();
 	$prev = libxml_use_internal_errors( true );
 
 	// The XML prolog pins UTF-8; the wrapper gives a single, known root node.
 	$loaded = $dom->loadHTML(
-		'<?xml encoding="utf-8" ?><div id="abc-enlarge-root">' . $content . '</div>',
+		'<?xml encoding="utf-8" ?><div id="inlarge-root">' . $content . '</div>',
 		LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
 	);
 	libxml_clear_errors();
 	libxml_use_internal_errors( $prev );
 
 	if ( ! $loaded ) {
-		return abc_enlarge_apply_to_linked_images( $content );
+		return inlarge_apply_to_linked_images( $content );
 	}
 
 	$xpath = new DOMXPath( $dom );
-	$roots = $xpath->query( '//*[@id="abc-enlarge-root"]' );
+	$roots = $xpath->query( '//*[@id="inlarge-root"]' );
 	$root  = $roots ? $roots->item( 0 ) : null;
 	if ( ! $root ) {
-		return abc_enlarge_apply_to_linked_images( $content );
+		return inlarge_apply_to_linked_images( $content );
 	}
 
 	$images  = $xpath->query( './/img', $root );
@@ -316,11 +316,11 @@ function abc_enlarge_apply_with_galleries( $content, $apply_galleries ) {
 
 			$parent = $img->parentNode;
 
-			if ( abc_enlarge_node_in_gallery( $img ) ) {
+			if ( inlarge_node_in_gallery( $img ) ) {
 				if ( ! $apply_galleries ) {
 					continue;
 				}
-				$large = abc_enlarge_resolve_large_url( $img );
+				$large = inlarge_resolve_large_url( $img );
 				if ( '' === $large ) {
 					continue;
 				}
@@ -332,11 +332,11 @@ function abc_enlarge_apply_with_galleries( $content, $apply_galleries ) {
 					$parent->replaceChild( $anchor, $img );
 					$anchor->appendChild( $img );
 				}
-				abc_enlarge_add_class( $img, $class );
+				inlarge_add_class( $img, $class );
 				$changed = true;
 			} elseif ( $parent && 'a' === strtolower( $parent->nodeName )
-				&& abc_enlarge_href_is_image( $parent->getAttribute( 'href' ) ) ) {
-				abc_enlarge_add_class( $img, $class );
+				&& inlarge_href_is_image( $parent->getAttribute( 'href' ) ) ) {
+				inlarge_add_class( $img, $class );
 				$changed = true;
 			}
 		}
@@ -359,7 +359,7 @@ function abc_enlarge_apply_with_galleries( $content, $apply_galleries ) {
  * @param DOMElement $img   The image node.
  * @param string     $class Its current class attribute.
  */
-function abc_enlarge_add_class( $img, $class ) {
+function inlarge_add_class( $img, $class ) {
 	$class = trim( $class );
 	$img->setAttribute( 'class', '' === $class ? 'abc-enlarge' : $class . ' abc-enlarge' );
 }
@@ -370,7 +370,7 @@ function abc_enlarge_add_class( $img, $class ) {
  * @param DOMNode $node The node to test.
  * @return bool
  */
-function abc_enlarge_node_in_gallery( $node ) {
+function inlarge_node_in_gallery( $node ) {
 	for ( $p = $node->parentNode; $p && XML_ELEMENT_NODE === $p->nodeType; $p = $p->parentNode ) {
 		if ( ! ( $p instanceof DOMElement ) || ! $p->hasAttribute( 'class' ) ) {
 			continue;
@@ -395,11 +395,11 @@ function abc_enlarge_node_in_gallery( $node ) {
  * @param DOMElement $img The image node.
  * @return string Large image URL, or '' when none can be determined.
  */
-function abc_enlarge_resolve_large_url( $img ) {
+function inlarge_resolve_large_url( $img ) {
 	$parent = $img->parentNode;
 	if ( $parent && 'a' === strtolower( $parent->nodeName ) ) {
 		$href = $parent->getAttribute( 'href' );
-		if ( abc_enlarge_href_is_image( $href ) ) {
+		if ( inlarge_href_is_image( $href ) ) {
 			return $href;
 		}
 	}
@@ -418,7 +418,7 @@ function abc_enlarge_resolve_large_url( $img ) {
 		if ( $full !== $src ) {
 			return $full;
 		}
-		if ( abc_enlarge_href_is_image( $src ) ) {
+		if ( inlarge_href_is_image( $src ) ) {
 			return $src; // No larger size known — enlarge the current image inline.
 		}
 	}
@@ -426,8 +426,8 @@ function abc_enlarge_resolve_large_url( $img ) {
 	return '';
 }
 
-require_once ABC_ENLARGE_DIR . 'includes/class-abc-enlarge-admin.php';
-ABC_Enlarge_Admin::init();
+require_once INLARGE_DIR . 'includes/class-inlarge-admin.php';
+Inlarge_Admin::init();
 
-require_once ABC_ENLARGE_DIR . 'includes/class-abc-enlarge-settings.php';
-ABC_Enlarge_Settings::init();
+require_once INLARGE_DIR . 'includes/class-inlarge-settings.php';
+Inlarge_Settings::init();
